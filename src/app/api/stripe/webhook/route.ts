@@ -17,12 +17,13 @@ export const POST = async (request: Request) => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2025-05-28.basil",
   });
+  // HMAC with SHA-256 verification assertion with webhook secret
   const event = stripe.webhooks.constructEvent(
     text,
     signature,
     process.env.STRIPE_WEBHOOK_SECRET,
   );
-
+  // validate if assingned is stipe and is not altered
   switch (event.type) {
     case "invoice.paid": {
       if (!event.data.object.id) {

@@ -36,9 +36,6 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (!session || !session.user || !session.user.clinic) {
-    redirect("/authentication");
-  }
   const { from, to } = await searchParams;
   if (!from || !to) {
     redirect(
@@ -60,7 +57,7 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
     session: {
       user: {
         clinic: {
-          id: session.user.clinic.id,
+          id: session!.user.clinic!.id,
         },
       },
     },

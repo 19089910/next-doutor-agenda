@@ -34,6 +34,7 @@
       [better-auth basic-usage](https://www.better-auth.com/docs/basic-usage)
   - /src/lib/auth.ts/auth/verification/emailAndPassword/enabled: true
   - /src/lib/auth-client.ts/authClient
+  - 57:00
 - [x] Fundamentos do Next.js (Rotas, Páginas, Layouts)
 - [x] Criação de clínica
 
@@ -55,5 +56,49 @@
 - [] Criação de agendamentos
 - [] Listagem de agendamentos
 - [] Deleção de agendamentos
+
+## Roteiro Aula 05: Tela Dashboard e Integração de Pagamentos
+
+- []
+- []
+- []
+- 1:22:00
+- [] [Stripe_env]https://dashboard.stripe.com/
+  - Chaves de API: STRIPE_SECRET_KEY="" STRIPE_PUBLISHABLE_KEY=""
+  - https://dashboard.stripe.com/ catalago-de-produtos/criar/STRIPE_PRODUCT_ID
+  - npm i stripe@18.2.0 @strpe/stripe-js@7.3.1 --legacy-peer-deps
+- [] Criar Stipe Checkout Session
+
+  - /src/actions/create-stipe-checkout/index.ts
+  - NEXT_PUBLIC_APP_URL=http://localhost:3000
+  - dashboard.stripe.com/catalago de produtos/produtos/preços/ 59,00/.../copiar id endereço
+
+    - delet STRIPE_PRODUCT_ID
+    - Add STRIPE_ESSENTIAL_PLAN_PRICE_ID=price_1... (pode add novos planos STRIPE_PREMIUM...)
+
+  - /src/app/subscription/\_components/subscription-plan.tsx/handleSubscribe
+    - se tivesse outros planos:
+      - /src/actions/create-stipe-checkout/index.ts/createStripeCHeckout:
+        - protectedActionClient.schema(plan: z.enum(["essential" , "premium"]),).action(...)
+        - refatoraria a session do subscription-plan.tsx baseado se no plan que recebe do schema cada plano vai ter uma session diferente.
+
+- [] redirecionar a sessao ao checkout(ir ao stripe)
+
+  - /src/app/subscription/\_components/subscription-plan.tsx/import { loadStripe } from "@stripe/stripe-js";
+  - NEXT*PUBLIC* no STRIPE_PUBLISHABLE_KEY pois ela nao era acessivel no client \_compomponet saiba que qual quer usuario saber agora, mas nao e sensivel.
+  - /src/app/subscription/\_components/subscription-plan.tsx/SubscriptionPlan/createStripCheckoutAtion/onSuccessonSuccess: async ({ data }) => {...}
+  - test Mode: card information: 4242 4242 4242 4242 o resto aleatorio.
+
+- [] webhook (local)
+
+  - [cli_stripe]https://docs.stripe.com/stripe-cli/install?install-method=windows
+  - stripe login (faça login no stripe)
+  - stripe listen --forward-to localhost:3000/api/stripe/webhook (STRIPE_WEBHOOK_SECRET pessoas autorizadas estao chamando o webhook local)
+  - tem que deixar rodando o stripe listen
+  - /src/app/api/stripe/webhook/route.ts (nao esquecer os break em cada evento) 1:50:00 - 2:12:00
+
+- [] webhook canselar o plano
+  - [customer_portal_link]https://dashboard.stripe.com/acct_1SuczfCXzPactw8e/test/settings/billing/portal
+- []
 
 ---
