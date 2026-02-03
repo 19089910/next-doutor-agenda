@@ -185,13 +185,13 @@ const AddAppointmentForm = ({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full cursor-pointer disabled:cursor-not-allowed">
                       <SelectValue placeholder="Selecione um paciente" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {patients.map((patient) => (
-                      <SelectItem key={patient.id} value={patient.id}>
+                      <SelectItem key={patient.id} value={patient.id} className="cursor-pointer">
                         {patient.name}
                       </SelectItem>
                     ))}
@@ -213,13 +213,13 @@ const AddAppointmentForm = ({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full cursor-pointer disabled:cursor-not-allowed">
                       <SelectValue placeholder="Selecione um médico" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {doctors.map((doctor) => (
-                      <SelectItem key={doctor.id} value={doctor.id}>
+                      <SelectItem key={doctor.id} value={doctor.id} className="cursor-pointer">
                         {doctor.name} - {doctor.specialty}
                       </SelectItem>
                     ))}
@@ -281,7 +281,7 @@ const AddAppointmentForm = ({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent className="w-auto p-0 pointer-events-auto" align="start">
                     <Calendar
                       mode="single"
                       selected={field.value}
@@ -310,7 +310,7 @@ const AddAppointmentForm = ({
                   disabled={!isDateTimeEnabled || !selectedDate}
                 >
                   <FormControl>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full cursor-pointer disabled:cursor-not-allowed">
                       <SelectValue placeholder="Selecione um horário" />
                     </SelectTrigger>
                   </FormControl>
@@ -320,6 +320,7 @@ const AddAppointmentForm = ({
                         key={time.value}
                         value={time.value}
                         disabled={!time.available}
+                        className="cursor-pointer"
                       >
                         {time.label} {!time.available && "(Indisponível)"}
                       </SelectItem>
