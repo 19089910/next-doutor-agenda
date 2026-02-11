@@ -64,10 +64,27 @@ export const getAvailableTimes = protectedWithClinicActionClient
         .set("minute", Number(time.split(":")[1]))
         .set("second", 0);
 
-      return (
+      // Check if the slot is within doctor's working hours
+      const isWithinWorkingHours =
         date.format("HH:mm:ss") >= doctorAvailableFrom.format("HH:mm:ss") &&
-        date.format("HH:mm:ss") <= doctorAvailableTo.format("HH:mm:ss")
-      );
+        date.format("HH:mm:ss") <= doctorAvailableTo.format("HH:mm:ss");
+
+      if (!isWithinWorkingHours) return false;
+
+      // Check if the slot is in the past (only for today)
+      const isToday = dayjs(parsedInput.date).isSame(dayjs(), "day");
+      if (isToday) {
+        const slotTime = dayjs()
+          .set("hour", Number(time.split(":")[0]))
+          .set("minute", Number(time.split(":")[1]))
+          .set("second", 0);
+        
+        if (slotTime.isBefore(dayjs())) {
+          return false;
+        }
+      }
+
+      return true;
     });
     return doctorTimeSlots.map((time) => {
       return {
