@@ -48,6 +48,26 @@ export const POST = async (request: Request) => {
       if (!userId) {
         throw new Error("User ID not found");
       }
+      const user = await db.query.usersTable.findFirst({
+        where: eq(usersTable.id, userId),
+        columns: {
+          stripeSubscriptionId: true,
+        },
+      });
+
+      if (
+        user?.stripeSubscriptionId &&
+        user.stripeSubscriptionId !== subscription
+      ) {
+        // User already has a different subscription active
+        // You might want to log this or handle it specific to your business logic
+        // For now, we'll just return early to prevent overwriting
+        return NextResponse.json({
+          received: true,
+          message: "User already has an active subscription",
+        });
+      }
+
       await db
         .update(usersTable)
         .set({

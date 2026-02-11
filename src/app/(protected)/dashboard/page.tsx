@@ -37,6 +37,15 @@ const DashboardPage = async ({ searchParams }: DashboardPageProps) => {
     headers: await headers(),
   });
   const { from, to } = await searchParams;
+
+  if (!session?.user.plan) {
+    redirect("/new-subscription");
+  }
+
+  if (!session?.user.clinic) {
+    redirect("/clinic-form");
+  }
+
   if (!from || !to) {
     redirect(
       `/dashboard?from=${dayjs().format("YYYY-MM-DD")}&to=${dayjs().add(1, "month").format("YYYY-MM-DD")}`,
