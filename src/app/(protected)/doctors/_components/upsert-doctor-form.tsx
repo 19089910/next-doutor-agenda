@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
+
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -189,19 +189,19 @@ const UpsertDoctorForm = ({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Preço da consulta</FormLabel>
-                <NumericFormat
-                  value={field.value}
-                  onValueChange={(value) => {
-                    field.onChange(value.floatValue);
+                <Input
+                  className="text-left"
+                  placeholder="R$ 0,00"
+                  value={new Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  }).format(field.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const digits = value.replace(/\D/g, "");
+                    const realValue = Number(digits) / 100;
+                    field.onChange(realValue);
                   }}
-                  decimalScale={2}
-                  fixedDecimalScale
-                  decimalSeparator=","
-                  allowNegative={false}
-                  allowLeadingZeros={false}
-                  thousandSeparator="."
-                  customInput={Input}
-                  prefix="R$"
                 />
                 <FormMessage />
               </FormItem>
